@@ -22,24 +22,22 @@ class ArticleList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) #요청오류
 
 
+class ArticleDetail(APIView):
 
-
-
-
-@api_view(['GET', 'PUT', 'DELETE'])
-def articleDetailAPI(request,article_id):
-    if request.method == 'GET':
-        # article = Article.objects.get(id=article_id) # 작동은 하나 id값이 유효하지 않으면 에러
+    def get(self, request, article_id, format=None):
         article = get_object_or_404(Article,id=article_id) # 에러처리를 위해 조회에 주로 사용!
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
-    elif request.method == 'PUT':
+
+    def put(self, request, article_id, format=None):
         article = get_object_or_404(Article,id=article_id)         
         serializer = ArticleSerializer(article, data=request.data) #조회한 데이터에 입력받은 데이터 덮어쓰기
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-    elif request.method == 'DELETE':
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, article_id, format=None):
         article = get_object_or_404(Article,id=article_id)         
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
