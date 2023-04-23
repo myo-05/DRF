@@ -28,6 +28,13 @@ def index(request):
 def article_view(request,article_id):
     if request.method == 'GET':
         # article = Article.objects.get(id=article_id) # 작동은 하나 id값이 유효하지 않으면 에러
-        article = get_object_or_404(Article,id=article_id) # 조회 에러처리를 위해 주로 사용!
+        article = get_object_or_404(Article,id=article_id) # 에러처리를 위해 조회에 주로 사용!
         serializer = ArticleSerializer(article)
-    return Response(serializer.data)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        article = get_object_or_404(Article,id=article_id)         
+        serializer = ArticleSerializer(article, data=request.data) #조회한 데이터에 입력받은 데이터 덮어쓰기
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
