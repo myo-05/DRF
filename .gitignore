@@ -344,4 +344,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,python,django,visualstudiocode
 
 # migrations
-*.py~    # 마이그레이션 파일을 제외하는 패턴
+*/migrations
