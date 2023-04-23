@@ -9,7 +9,7 @@ from articles.serializers import ArticleSerializer
 
 
 @api_view(['GET', 'POST'])
-def index(request):
+def articleAPI(request):
     if request.method == 'GET':
         articles = Article.objects.all()
         article = articles[0]
@@ -25,7 +25,7 @@ def index(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) #요청오류
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def article_view(request,article_id):
+def articleDetailAPI(request,article_id):
     if request.method == 'GET':
         # article = Article.objects.get(id=article_id) # 작동은 하나 id값이 유효하지 않으면 에러
         article = get_object_or_404(Article,id=article_id) # 에러처리를 위해 조회에 주로 사용!
@@ -37,4 +37,7 @@ def article_view(request,article_id):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        
+    elif request.method == 'DELETE':
+        article = get_object_or_404(Article,id=article_id)         
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
